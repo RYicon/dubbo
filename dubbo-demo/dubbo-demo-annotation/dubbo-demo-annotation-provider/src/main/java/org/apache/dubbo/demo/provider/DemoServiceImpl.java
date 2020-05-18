@@ -32,8 +32,9 @@ public class DemoServiceImpl implements DemoService {
     private static final Logger logger = LoggerFactory.getLogger(DemoServiceImpl.class);
 
     @Override
-    public String sayHello(String name) {
+    public String sayHello(String name) throws InterruptedException {
         logger.info("Hello " + name + ", request from consumer: " + RpcContext.getContext().getRemoteAddress());
+        Thread.sleep(200);
         return "Hello " + name + ", response from provider: " + RpcContext.getContext().getLocalAddress();
     }
 

@@ -35,7 +35,7 @@ public class Application {
 
     @Configuration
     @EnableDubbo(scanBasePackages = "org.apache.dubbo.demo.provider")
-    @PropertySource("classpath:/spring/dubbo-provider.properties")
+    @PropertySource(value = {"classpath:/spring/dubbo-provider.properties","classpath:/spring/dubbo-provider_2.properties"})
     static class ProviderConfiguration {
         @Bean
         public RegistryConfig registryConfig() {
@@ -44,4 +44,6 @@ public class Application {
             return registryConfig;
         }
     }
+
+
 }

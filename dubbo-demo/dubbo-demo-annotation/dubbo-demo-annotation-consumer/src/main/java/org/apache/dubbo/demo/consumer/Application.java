@@ -18,6 +18,7 @@
  */
 package org.apache.dubbo.demo.consumer;
 
+import org.apache.dubbo.common.utils.StringUtils;
 import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.apache.dubbo.demo.DemoService;
 import org.apache.dubbo.demo.consumer.comp.DemoServiceComponent;
@@ -27,18 +28,55 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 public class Application {
     /**
      * In order to make sure multicast registry works, need to specify '-Djava.net.preferIPv4Stack=true' before
      * launch the application
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ConsumerConfiguration.class);
         context.start();
         DemoService service = context.getBean("demoServiceComponent", DemoServiceComponent.class);
-        String hello = service.sayHello("world");
-        System.out.println("result :" + hello);
+        String sayContext = ReadTest();
+        String hello = "";
+        while (true){
+            System.out.println("ReadTest, Please Enter Data:");
+            InputStreamReader is = new InputStreamReader(System.in); //new构造InputStreamReader对象
+            BufferedReader br = new BufferedReader(is); //拿构造的方法传到BufferedReader中，此时获取到的就是整个缓存流
+            try { //该方法中有个IOExcepiton需要捕获
+                sayContext = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (StringUtils.isNotEmpty(sayContext)){
+                hello = service.sayHello(sayContext);
+                System.out.println("result :" + hello);
+            }
+
+            sayContext = null;
+        }
+
+
     }
+
+    public static String ReadTest() {
+        System.out.println("ReadTest, Please Enter Data:");
+        InputStreamReader is = new InputStreamReader(System.in); //new构造InputStreamReader对象
+        BufferedReader br = new BufferedReader(is); //拿构造的方法传到BufferedReader中，此时获取到的就是整个缓存流
+        try { //该方法中有个IOExcepiton需要捕获
+            String name = br.readLine();
+            return name;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
 
     @Configuration
     @EnableDubbo(scanBasePackages = "org.apache.dubbo.demo.consumer.comp")

@@ -20,9 +20,9 @@ import java.util.concurrent.CompletableFuture;
 
 public interface DemoService {
 
-    String sayHello(String name);
+    String sayHello(String name) throws InterruptedException;
 
-    default CompletableFuture<String> sayHelloAsync(String name) {
+    default CompletableFuture<String> sayHelloAsync(String name) throws InterruptedException {
         return CompletableFuture.completedFuture(sayHello(name));
     }
 

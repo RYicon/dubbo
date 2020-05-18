@@ -32,7 +32,7 @@ public class DemoServiceComponent implements DemoService {
     private DemoService demoService;
 
     @Override
-    public String sayHello(String name) {
+    public String sayHello(String name) throws InterruptedException {
         return demoService.sayHello(name);
     }
 
